@@ -184,4 +184,27 @@ app.get('/dowloader/tiktok', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Cuaca Search Error" }); }
 });
 
+// 2. FITUR INFO UPDATE
+app.get('/info/update', (req, res) => {
+    res.send(`
+    <body onclick="playMusic()" style="margin:0; background: url('https://files.catbox.moe/jh1sff.jpg') no-repeat center center fixed; background-size: cover; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div style="background: rgba(0,0,0,0.8); color: white; padding: 30px; border-radius: 15px; border: 1px solid #38bdf8; max-width: 450px; text-align: center; backdrop-filter: blur(5px);">
+            <h2 style="color: #38bdf8; margin-top: 0;">📢 INFORMASI UPDATE!</h2>
+            <hr style="border: 0.5px solid #38bdf8">
+            <ul style="text-align: left; list-style: none; padding: 0;">
+                <li style="margin-bottom: 10px;">✅ <b>Migrasi:</b> Berhasil ke Vercel Serverless.</li>
+                <li style="margin-bottom: 10px;">✅ <b>Audio:</b> Menambahkan Autoplay Background Music.</li>
+                <li style="margin-bottom: 10px;">✅ <b>UI/UX:</b> Background Anime & Glassmorphism.</li>
+                <li style="margin-bottom: 10px;">✅ <b>Clean:</b> FIX EROR</li>
+            </ul>
+            <p style="font-size: 0.8em; color: #94a3b8;">Ketuk layar untuk musik.</p>
+            <a href="/" style="color: #38bdf8; text-decoration: none; font-weight: bold;">[ KEMBALI ]</a>
+        </div>
+        <audio id="audioPlayer" loop><source src="${MUSIC_URL}" type="audio/mpeg"></audio>
+        <script>function playMusic() { document.getElementById("audioPlayer").play(); }</script>
+    </body>
+    `);
+});
+
+
 module.exports = app;
