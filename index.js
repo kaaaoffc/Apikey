@@ -200,7 +200,7 @@ app.get('/info/update', (req, res) => {
             <p style="font-size: 0.8em; color: #94a3b8;">Ketuk layar untuk musik.</p>
             <a href="/" style="color: #38bdf8; text-decoration: none; font-weight: bold;">[ KEMBALI ]</a>
         </div>
-        <audio id="audioPlayer" loop><source src="${MUSIC_URL}" type="audio/mpeg"></audio>
+        <audio id="audioPlayer" loop><source src="https://files.catbox.moe/x5d0fh.mp3" type="audio/mpeg"></audio>
         <script>function playMusic() { document.getElementById("audioPlayer").play(); }</script>
     </body>
     `);
