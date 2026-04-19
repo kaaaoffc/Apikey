@@ -216,8 +216,8 @@ app.get('/sad/jawa', (req, res) => {
             <ul style="text-align: left; list-style: none; padding: 0;">
                 <li style="margin-bottom: 10px;"> 🥀 <b>:</b> wong wong ngertine aku guya guyu bahagia koyo raono beban urip,tapi neng mburi kabeh kui asline remok ra karuan</li>
                 <li style="margin-bottom: 10px;">🌺 <b>:</b> aku iso ngusap banyu motoku tapi aku oraiso ngobati lorone atiku</li>
-                <li style="margin-bottom: 10px;">🫰 <b>UI/UX:</b>suwun ya wes tau gawe aku salting masio Saiki awakdewe asing </li>
-                <li style="margin-bottom: 10px;">😭<b>Clean:</b> Aku asline seneng banget Karo koe,tapi aku sadar nek koe ramungmin seneng aku</li>
+                <li style="margin-bottom: 10px;">🫰 <b>:</b>suwun ya wes tau gawe aku salting masio Saiki awakdewe asing </li>
+                <li style="margin-bottom: 10px;">😭<b>:</b> Aku asline seneng banget Karo koe,tapi aku sadar nek koe ramungmin seneng aku</li>
             </ul>
             <p style="font-size: 0.8em; color: #94a3b8;">Ketuk layar untuk musik.</p>
             <a href="/" style="color: #38bdf8; text-decoration: none; font-weight: bold;">[ KEMBALI ]</a>
