@@ -175,3 +175,4 @@ app.get('/information/cuaca', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Cuaca Search Error" }); }
 });
 
+module.exports = app;
