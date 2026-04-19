@@ -175,4 +175,13 @@ app.get('/information/cuaca', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Cuaca Search Error" }); }
 });
 
+app.get('/dowloader/tiktok', async (req, res) => {
+    const q = req.query.q;
+    if (!q) return res.json({ status: false, message: "Contoh: https://api-kaaaoffc.vercel.app/downloader/tiktok?url=LINK" });
+    try {
+        const response = await axios.get(`https://api.nexray.web.id/downloader/tiktok?url=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "Cuaca Search Error" }); }
+});
+
 module.exports = app;
