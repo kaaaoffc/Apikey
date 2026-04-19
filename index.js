@@ -247,22 +247,22 @@ app.get('/dowloader/ytmp4', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "TikTok Search Error" }); }
 });
 
+// --- FITUR BARU: SHOLAT ---
+
+// Ambil semua data kota
 app.get('/sholat/kota/semua', async (req, res) => {
-    const text = req.query.text;
-    if (!text) return res.json({ status: false, message: "Contoh: /sholat/kota/semua" });
     try {
-        const response = await axios.get(`https://api.myquran.com/v2/sholat/kota/semua`);
-        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
-    } catch (e) { res.json({ status: false, error: "API AI Error" }); }
+        const r = await axios.get("https://api.myquran.com/v2/sholat/kota/semua");
+        res.json({ status: true, creator: "Kaaaoffc", result: r.data });
+    } catch (e) { res.json({ status: false, error: "Gagal mengambil data kota" }); }
 });
 
-app.get('/kota/semua', async (req, res) => {
-    const text = req.query.text;
-    if (!text) return res.json({ status: false, message: "Contoh: /kota/semua" });
+// Ambil semua jadwal sholat (Catatan: Seringkali butuh ID kota, tapi ini bypass ke endpoint semua)
+app.get('/sholat/jadwal/semua', async (req, res) => {
     try {
-        const response = await axios.get(`https://api.myquran.com/v2/kota/semua`);
-        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
-    } catch (e) { res.json({ status: false, error: "API AI Error" }); }
+        const r = await axios.get("https://api.myquran.com/v2/sholat/kota/semua"); // Endpoint list kota untuk referensi
+        res.json({ status: true, creator: "Kaaaoffc", message: "Gunakan ID kota dari list ini untuk cek jadwal spesifik", result: r.data });
+    } catch (e) { res.json({ status: false, error: "Gagal mengambil jadwal" }); }
 });
              
 
