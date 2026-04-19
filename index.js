@@ -65,6 +65,7 @@ app.get('/docs', (req, res) => {
     </head>
     <body>
         <h1>📚 Dokumentasi Kaaaoffc API</h1>
+        <h1> SEARCH /info/updates untuk mengetahui update!</h1>
         
         <div class="card">
             <h2>🤖 Artificial Intelligence</h2>
@@ -227,6 +228,25 @@ app.get('/sad/jawa', (req, res) => {
     </body>
     `);
 });
+
+app.get('/dowloader/ytmp3', async (req, res) => {
+    const q = req.query.q;
+    if (!q) return res.json({ status: false, message: "Contoh: /dowloader/ytmp3?url=" });
+    try {
+        const response = await axios.get(`https://api.ourin.xyz/api/ytmp3?url=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "TikTok Search Error" }); }
+});
+
+app.get('/dowloader/ytmp4', async (req, res) => {
+    const q = req.query.q;
+    if (!q) return res.json({ status: false, message: "Contoh: /dowloader/ytmp4?url=" });
+    try {
+        const response = await axios.get(`https://api.ourin.xyz/api/ytmp4?url=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "TikTok Search Error" }); }
+});
+
 
              
 
