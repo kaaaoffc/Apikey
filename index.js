@@ -207,4 +207,27 @@ app.get('/info/update', (req, res) => {
 });
 
 
+app.get('/sad/jawa', (req, res) => {
+    res.send(`
+    <body onclick="playMusic()" style="margin:0; background: url('https://files.catbox.moe/jh1sff.jpg') no-repeat center center fixed; background-size: cover; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div style="background: rgba(0,0,0,0.8); color: white; padding: 30px; border-radius: 15px; border: 1px solid #38bdf8; max-width: 450px; text-align: center; backdrop-filter: blur(5px);">
+            <h2 style="color: #38bdf8; margin-top: 0;">SAD JAWA</h2>
+            <hr style="border: 0.5px solid #38bdf8">
+            <ul style="text-align: left; list-style: none; padding: 0;">
+                <li style="margin-bottom: 10px;"> 🥀 <b>:</b> wong wong ngertine aku guya guyu bahagia koyo raono beban urip,tapi neng mburi kabeh kui asline remok ra karuan</li>
+                <li style="margin-bottom: 10px;">🌺 <b>:</b> aku iso ngusap banyu motoku tapi aku oraiso ngobati lorone atiku</li>
+                <li style="margin-bottom: 10px;">🫰 <b>UI/UX:</b>suwun ya wes tau gawe aku salting masio Saiki awakdewe asing </li>
+                <li style="margin-bottom: 10px;">😭<b>Clean:</b> Aku asline seneng banget Karo koe,tapi aku sadar nek koe ramungmin seneng aku</li>
+            </ul>
+            <p style="font-size: 0.8em; color: #94a3b8;">Ketuk layar untuk musik.</p>
+            <a href="/" style="color: #38bdf8; text-decoration: none; font-weight: bold;">[ KEMBALI ]</a>
+        </div>
+        <audio id="audioPlayer" loop><source src="https://files.catbox.moe/x5d0fh.mp3" type="audio/mpeg"></audio>
+        <script>function playMusic() { document.getElementById("audioPlayer").play(); }</script>
+    </body>
+    `);
+});
+
+             
+
 module.exports = app;
