@@ -247,7 +247,23 @@ app.get('/dowloader/ytmp4', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "TikTok Search Error" }); }
 });
 
+app.get('/sholat/kota/semua', async (req, res) => {
+    const text = req.query.text;
+    if (!text) return res.json({ status: false, message: "Contoh: /sholat/kota/semua" });
+    try {
+        const response = await axios.get(`https://api.myquran.com/v2/sholat/kota/semua`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "API AI Error" }); }
+});
 
+app.get('/kota/semua', async (req, res) => {
+    const text = req.query.text;
+    if (!text) return res.json({ status: false, message: "Contoh: /kota/semua" });
+    try {
+        const response = await axios.get(`https://api.myquran.com/v2/kota/semua`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "API AI Error" }); }
+});
              
 
 module.exports = app;
