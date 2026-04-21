@@ -158,14 +158,7 @@ app.get('/search/anime/komiku/search', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Anime Search Error" }); }
 });
 
-app.get('/information/gempa', async (req, res) => {
-    const q = req.query.q;
-    if (!q) return res.json({ status: false, message: "Contoh: /search/yout" });
-    try {
-        const response = await axios.get(`https://api.nexray.web.id/information/gempa${encodeURIComponent(q)}`);
-        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
-    } catch (e) { res.json({ status: false, error: "Info gempa Error" }); }
-});
+
 
 app.get('/information/cuaca', async (req, res) => {
     const q = req.query.q;
@@ -261,6 +254,13 @@ app.get('/sholat/kota/semua', async (req, res) => {
 app.get('/sholat/jadwal/semua', async (req, res) => {
     try {
         const r = await axios.get("https://api.myquran.com/v2/sholat/kota/semua"); // Endpoint list kota untuk referensi
+        res.json({ status: true, creator: "Kaaaoffc", message: "Gunakan ID kota dari list ini untuk cek jadwal spesifik", result: r.data });
+    } catch (e) { res.json({ status: false, error: "Gagal mengambil jadwal" }); }
+});
+
+app.get('/informasi/gempa', async (req, res) => {
+    try {
+        const r = await axios.get("https://api.nexray.web.id/information/gempa"); // Endpoint list kota untuk referensi
         res.json({ status: true, creator: "Kaaaoffc", message: "Gunakan ID kota dari list ini untuk cek jadwal spesifik", result: r.data });
     } catch (e) { res.json({ status: false, error: "Gagal mengambil jadwal" }); }
 });
