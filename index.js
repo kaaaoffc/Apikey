@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
     <html lang="id">
     <head>
         <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Kaaaoffc API - Ultimate</title>
+        <title>Kaaaoffc - Api</title>
         <style>
             body { margin: 0; padding: 0; font-family: sans-serif; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://files.catbox.moe/jh1sff.jpg'); background-size: cover; background-position: center; background-attachment: fixed; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; }
             .container { background: rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
@@ -65,7 +65,7 @@ app.get('/docs', (req, res) => {
     </head>
     <body>
         <h1>📚 Dokumentasi Kaaaoffc API</h1>
-        <h1> SEARCH /info/updates untuk mengetahui update!</h1>
+        <h1> SEARCH /info/update untuk mengetahui update!</h1>
         
         <div class="card">
             <h2>🤖 Artificial Intelligence</h2>
