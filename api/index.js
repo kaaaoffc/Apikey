@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 
 // --- CONFIG ---
-const MONGO_URI = "ISI_DENGAN_MONGO_URI_LU_DISINI"; 
+const MONGO_URI = "mongodb+srv://eka710231_db_user:kaaacloud@cluster0.6ssgy30.mongodb.net/?appName=Cluster0"; 
 const BG_URL = "https://wallpapercave.com/wp/wp11166318.jpg"; 
 const MUSIC_URL = "https://files.catbox.moe/x5d0fh.mp3";
 
