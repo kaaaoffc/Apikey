@@ -11,10 +11,10 @@ app.use(cookieParser());
 app.use(require('cors')());
 
 // --- CONFIGURATION ---
-const MONGO_URI = "ISI_MONGO_URI_ATLAS_LU";
-const RESEND_API = "ISI_API_KEY_RESEND";
-const TELE_TOKEN = "ISI_TOKEN_BOT_TELE";
-const OWNER_ID = "ISI_ID_TELEGRAM_LU";
+const MONGO_URI = "mongodb+srv://eka710231_db_user:kaaacloud@cluster0.6ssgy30.mongodb.net/?appName=Cluster0";
+const RESEND_API = "‎re_Y3DfKKCM_7rJCyA3V1JHoxUNxQ2sc7Fb1";
+const TELE_TOKEN = "7789045134:AAFY6waeQ6pD1TAx8_Rfv7J6qsokgPZXPsQ";
+const OWNER_ID = "1955836653";
 const BG_URL = "https://wallpapercave.com/wp/wp11166318.jpg"; 
 const MUSIC_URL = "https://files.catbox.moe/x5d0fh.mp3";
 
