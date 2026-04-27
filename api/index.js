@@ -155,6 +155,16 @@ app.get('/ai/gemini', async (req, res) => {
     } catch (e) { res.json({ status: false }); }
 });
 
+app.get('/ai/gpt-3.5-turbo', async (req, res) => {
+    await recordRequest(req);
+    const text = req.query.text;
+    if (!text) return res.json({ status: false, error: "Text required" });
+    try {
+        const r = await axios.get("https://api.nexray.web.id/ai/gpt-3.5-turbo?text=" + encodeURIComponent(text));
+        res.json({ status: true, creator: "Kaaaoffc", result: r.data.result });
+    } catch (e) { res.json({ status: false }); }
+});
+
 app.get('/logout', (req, res) => { res.clearCookie('userEmail'); res.redirect('/login'); });
 
 module.exports = app;
