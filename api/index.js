@@ -196,6 +196,22 @@ app.get('/search/tiktok', async (req, res) => {
     } catch (e) { res.json({ status: false }); }
 });
 
+// Route untuk nampilin halaman input OTP (Halaman yang tadi ilang)
+app.get('/verify', (req, res) => {
+    const email = req.query.email;
+    res.send(`
+    <body style="background:#020617;color:white;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+        <form action="/auth/verify" method="POST" style="background:rgba(30,41,59,0.3);backdrop-filter:blur(20px);padding:40px;border-radius:30px;border:1px solid #38bdf8;text-align:center;width:320px;">
+            <h2 style="color:#38bdf8;margin-bottom:20px;">VERIFICATION</h2>
+            <p style="font-size:10px;color:#64748b;margin-bottom:20px;">OTP sent to: <br><b>${email}</b></p>
+            <input name="email" type="hidden" value="${email}">
+            <input name="otp" type="text" placeholder="Enter 6-Digit OTP" style="width:100%;padding:15px;margin-bottom:20px;border-radius:12px;border:none;background:#0f172a;color:white;text-align:center;letter-spacing:5px;font-weight:bold;" required>
+            <button type="submit" style="width:100%;padding:15px;background:#38bdf8;border:none;border-radius:12px;font-weight:900;color:#020617;cursor:pointer;">VERIFY NOW</button>
+        </form>
+    </body>`);
+});
+
+
 app.get('/logout', (req, res) => { res.clearCookie('userEmail'); res.redirect('/login'); });
 
 module.exports = app;
