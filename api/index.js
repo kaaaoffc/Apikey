@@ -192,6 +192,158 @@ app.post('/auth/verify', async (req, res) => {
         res.redirect('/');
     } else res.send("Invalid OTP!");
 });
+// 3. Halaman Dokumentasi (Docs)
+app.get('/docs', (req, res) => {
+    res.send(`
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Docs - Kaaaoffc API</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', monospace;
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: #e2e8f0;
+    padding: 20px;
+}
+
+/* HEADER */
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    background: linear-gradient(90deg, #38bdf8, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* CARD */
+.card {
+    backdrop-filter: blur(12px);
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(56,189,248,0.2);
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 0 25px rgba(56,189,248,0.2);
+}
+
+/* TITLE */
+.card h2 {
+    color: #38bdf8;
+    margin-bottom: 10px;
+}
+
+/* CODE */
+code {
+    background: #020617;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: #f472b6;
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+/* LINK */
+a {
+    color: #38bdf8;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.footer a {
+    color: #38bdf8;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    color: #a78bfa;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📚 Kaaaoffc API Documentation</h1>
+
+<div class="card">
+    <h2>🤖 Artificial Intelligence</h2>
+    <p>Gemini AI:</p>
+    <code>/ai/gemini?text=halo</code>
+</div>
+
+<div class="card">
+    <h2>📱 Social Media Search</h2>
+    <p>TikTok Search:</p>
+    <code>/search/tiktok?q=sewates konco</code>
+    <p>YouTube Search:</p>
+    <code>/search/youtube?q=sewates konco</code>
+</div>
+
+<div class="card">
+    <h2>🕌 MyQuran Service</h2>
+    <p>Cari Kota:</p>
+    <code>/cari/kota/kediri</code>
+    <p>Jadwal Sholat:</p>
+    <code>/sholat/1301</code>
+</div>
+
+<div class="card">
+    <h2>🌊 Anime Search</h2>
+    <p>Komiku Search:</p>
+    <code>/search/anime/komiku/search?q=Judul</code>
+    <p>YouTube Anime:</p>
+    <code>/search/youtube?q=Judul</code>
+</div>
+
+<div class="card">
+    <h2>ℹ️ Informasi</h2>
+    <p>Gempa:</p>
+    <code>/information/gempa</code>
+    <p>Cuaca:</p>
+    <code>/information/cuaca?kota=malang</code>
+</div>
+
+<div class="footer">
+    <a href="https://wa.me/6285137572401" target="_blank">
+        ©2026 Kaaa Offc
+    </a>
+</div>
+
+</body>
+</html>
+`);
+});
+
+
 
 app.get('/logout', (req, res) => { res.clearCookie('userEmail'); res.redirect('/login'); });
 
