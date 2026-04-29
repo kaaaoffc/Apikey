@@ -343,6 +343,79 @@ a:hover {
 `);
 });
 
+/ 4. API Endpoint - Gemini AI (via NexRay)
+app.get('/ai/gemini', async (req, res) => {
+    const text = req.query.text;
+    if (!text) return res.json({ status: false, message: "Contoh: /ai/gemini?text=halo" });
+    try {
+        const response = await axios.get(`https://api.nexray.web.id/ai/gemini?text=${encodeURIComponent(text)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "API AI Error" }); }
+});
+
+// 5. API Endpoint - TikTok Search (via NexRay)
+app.get('/search/tiktok', async (req, res) => {
+    const q = req.query.q;
+    if (!q) return res.json({ status: false, message: "Contoh: /search/tiktok?q=sewates konco" });
+    try {
+        const response = await axios.get(`https://api.nexray.web.id/search/tiktok?q=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "TikTok Search Error" }); }
+});
+
+// 6. API Endpoint - MyQuran
+app.get('/cari/kota/:nama', async (req, res) => {
+    try {
+        const r = await axios.get(`https://api.myquran.com/v2/sholat/kota/cari/${req.params.nama}`);
+        res.json(r.data);
+    } catch (e) { res.json({ status: false, error: "Gagal cari kota" }); }
+});
+
+app.get('/sholat/:id', async (req, res) => {
+    try {
+        const d = new Date();
+        const tgl = `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
+        const r = await axios.get(`https://api.myquran.com/v2/sholat/jadwal/${req.params.id}/${tgl}`);
+        res.json(r.data);
+    } catch (e) { res.json({ status: false, error: "Gagal ambil jadwal" }); }
+});
+
+app.get('/search/youtube', async (req, res) => {
+    const q = req.query.q;
+    if (!q) return res.json({ status: false, message: "Contoh: /search/youtube?q=sewates konco" });
+    try {
+        const response = await axios.get(`https://api.nexray.web.id/search/youtube?q=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "Youtube Search Error" }); }
+});
+
+app.get('/search/anime/komiku/search', async (req, res) => {
+    const q = req.query.q;
+    if (!q) return res.json({ status: false, message: "Contoh: /search/anime/komiku/search?q=Judul" });
+    try {
+        const response = await axios.get(`https://api.nexray.web.id/search/anime/komiku/search  ?q=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "Anime Search Error" }); }
+});
+
+app.get('/information/gempa', async (req, res) => {
+    const q = req.query.q;
+    if (!q) return res.json({ status: false, message: "Contoh: /search/yout" });
+    try {
+        const response = await axios.get(`https://api.nexray.web.id/information/gempa${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "Info gempa Error" }); }
+});
+
+app.get('/information/cuaca', async (req, res) => {
+    const q = req.query.q;
+    if (!q) return res.json({ status: false, message: "Contoh: /information/cuaca?kota=Jakarta" });
+    try {
+        const response = await axios.get(`https://api.nexray.web.id/information/cuaca?kota=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
+    } catch (e) { res.json({ status: false, error: "Cuaca Search Error" }); }
+});
+
 
 
 app.get('/logout', (req, res) => { res.clearCookie('userEmail'); res.redirect('/login'); });
