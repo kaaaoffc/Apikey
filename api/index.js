@@ -55,7 +55,7 @@ app.get('/api/tiktok', async (req, res) => {
     const { search } = req.query;
     if (!search) return res.json({ status: false, message: "Masukkan query pencarian!" });
     try {
-        const response = await axios.get(`https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(search)}`);
+        const response = await axios.get(`https://api.nexray.eu.cc/search/tiktok?q=${encodeURIComponent(search)}`);
         res.json({ status: true, creator: "KaaaOffc", result: response.data });
     } catch (e) { res.json({ status: false, message: "TikTok API Error" }); }
 });
