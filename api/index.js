@@ -16,8 +16,10 @@ const resend = new Resend("re_Y3DfKKCM_7rJCyA3V1JHoxUNxQ2sc7Fb1");
 let isConnected = false;
 async function connectDB() {
     if (isConnected) return;
-    await mongoose.connect(MONGO_URI);
-    isConnected = true;
+    try {
+        await mongoose.connect(MONGO_URI);
+        isConnected = true;
+    } catch (e) { console.error("DB Error", e); }
 }
 
 // --- MODELS ---
@@ -39,293 +41,28 @@ app.use(async (req, res, next) => {
     next();
 });
 
-// --- MODERN LOGIN PAGE ---
+// --- PAGES ---
 app.get('/login', (req, res) => {
-    res.send(`<!DOCTYPE html><html><head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { background: #020617; overflow: hidden; }
-        .bg-glow { position: absolute; width: 300px; height: 300px; background: #38bdf8; filter: blur(120px); opacity: 0.15; z-index: -1; }
-        .glass-login { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 40px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-        input { background: rgba(255,255,255,0.03) !important; border: 1px solid rgba(255,255,255,0.08) !important; transition: 0.3s; }
-        input:focus { border-color: #38bdf8 !important; box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); outline: none; }
-    </style></head>
-    <body class="flex items-center justify-center min-h-screen p-6 text-white">
-        <div class="bg-glow top-10 left-10"></div>
-        <div class="bg-glow bottom-10 right-10" style="background:#818cf8"></div>
-        
-        <div class="glass-login w-full max-w-md p-10 md:p-14 text-center">
-            <div class="mb-10">
-                <div class="w-20 h-20 bg-sky-500/20 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-sky-500/30">
-                    <i class="fas fa-shield-halved text-4xl text-sky-400"></i>
-                </div>
-                <h1 class="text-3xl font-black italic tracking-tighter">KAAA<span class="text-sky-400">CLOUD</span></h1>
-                <p class="text-slate-500 text-xs mt-2 uppercase tracking-[0.3em]">Access Your Infrastructure</p>
-            </div>
-
-            <form action="/auth/login" method="POST" class="space-y-5">
-                <div class="text-left">
-                    <label class="text-[10px] font-bold text-sky-400 ml-4 mb-2 block uppercase tracking-widest">Email Address</label>
-                    <input name="email" type="email" placeholder="name@company.com" required class="w-full p-4 rounded-2xl text-sm">
-                </div>
-                <div class="text-left">
-                    <label class="text-[10px] font-bold text-sky-400 ml-4 mb-2 block uppercase tracking-widest">Password</label>
-                    <input name="password" type="password" placeholder="••••••••" required class="w-full p-4 rounded-2xl text-sm">
-                </div>
-                <button type="submit" class="w-full bg-sky-500 hover:bg-sky-400 text-slate-900 font-black p-4 rounded-2xl transition duration-300 transform active:scale-95 shadow-lg shadow-sky-500/20 mt-4 uppercase italic">
-                    Get Verification Code <i class="fas fa-arrow-right ml-2"></i>
-                </button>
-            </form>
-            
-            <p class="mt-10 text-[10px] text-slate-600 uppercase tracking-widest">Powered by KaaaOffc Automation</p>
-        </div>
-    </body></html>`);
+    res.send(`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>body{background:#020617;overflow:hidden}.bg-glow{position:absolute;width:300px;height:300px;background:#38bdf8;filter:blur(120px);opacity:.15;z-index:-1}.glass-login{background:rgba(15,23,42,.8);backdrop-filter:blur(20px);border:1px solid rgba(56,189,248,.2);border-radius:40px}input{background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.08)!important;transition:.3s}input:focus{border-color:#38bdf8!important}</style></head><body class="flex items-center justify-center min-h-screen p-6 text-white"><div class="bg-glow top-10 left-10"></div><div class="glass-login w-full max-w-md p-10 text-center"> <h1 class="text-3xl font-black italic tracking-tighter">KAAA<span class="text-sky-400">CLOUD</span></h1> <form action="/auth/login" method="POST" class="space-y-5 mt-10"> <input name="email" type="email" placeholder="Email Address" required class="w-full p-4 rounded-2xl text-sm"> <input name="password" type="password" placeholder="Password" required class="w-full p-4 rounded-2xl text-sm"> <button type="submit" class="w-full bg-sky-500 font-black p-4 rounded-2xl shadow-lg shadow-sky-500/20 uppercase italic">Get Code</button> </form></div></body></html>`);
 });
 
-// --- DASHBOARD (Sama kaya sebelumnya tapi sinkron) ---
 app.get('/', async (req, res) => {
     const email = req.cookies.userEmail;
     if (!email) return res.redirect('/login');
-    const userData = await User.findOne({ email });
+    await connectDB();
     const totalAkun = await User.countDocuments();
     const stats = await Stats.findOne({ name: "main" }) || { total_req: 0 };
     const logs = await Log.find().sort({ timestamp: -1 }).limit(7);
 
-    res.send(`<!DOCTYPE html><html><head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { background: #020617; color: white; font-family: sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); }
-        .sidebar { transition: 0.4s; transform: translateX(-100%); }
-        .sidebar.active { transform: translateX(0); }
-    </style></head>
-    <body class="p-4">
-        <div id="sidebar" class="sidebar fixed top-0 left-0 w-72 h-full glass z-50 p-8 shadow-2xl">
-            <h2 class="text-sky-400 font-black mb-10 italic text-xl uppercase">Kaaa Menu</h2>
-            <nav class="space-y-4 font-bold">
-                <a href="/" class="block p-4 rounded-2xl bg-sky-500/10 text-sky-400"><i class="fas fa-home mr-3"></i> Dashboard</a>
-                <a href="/list-cmd" class="block p-4 rounded-2xl hover:bg-white/5"><i class="fas fa-list mr-3"></i> List Command</a>
-                <a href="/docs" class="block p-4 rounded-2xl hover:bg-white/5"><i class="fas fa-file-code mr-3"></i> Documentation</a>
-                <a href="https://t.me/autoorderkaabot" target="_blank" class="block p-4 rounded-2xl bg-emerald-500/10 text-emerald-400"><i class="fas fa-shopping-cart mr-3"></i> Order Panel</a>
-                <a href="/logout" class="block p-4 rounded-2xl text-red-400 mt-10"><i class="fas fa-power-off mr-3"></i> Logout</a>
-            </nav>
-            <button onclick="toggleSidebar()" class="absolute top-8 right-8 text-slate-500"><i class="fas fa-times"></i></button>
-        </div>
-
-        <div class="max-w-4xl mx-auto">
-            <header class="flex justify-between items-center mb-8">
-                <button onclick="toggleSidebar()" class="w-12 h-12 glass rounded-2xl text-sky-400 text-xl"><i class="fas fa-bars-staggered"></i></button>
-                <h1 class="text-2xl font-black italic">KAAA<span class="text-sky-400">OFFC</span></h1>
-                <div class="w-12 h-12 rounded-full bg-sky-500 flex items-center justify-center font-black text-slate-900 border-2 border-sky-300">${email.charAt(0).toUpperCase()}</div>
-            </header>
-
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div class="glass p-6 rounded-[35px] border-l-4 border-sky-500">
-                    <p class="text-[10px] font-black text-slate-500 uppercase">Hits Record</p>
-                    <p class="text-3xl font-black text-sky-400 mt-1">${stats.total_req.toLocaleString()}</p>
-                </div>
-                <div class="glass p-6 rounded-[35px] border-l-4 border-emerald-500">
-                    <p class="text-[10px] font-black text-slate-500 uppercase">User Online</p>
-                    <p class="text-3xl font-black text-emerald-400 mt-1">1</p>
-                </div>
-            </div>
-
-            <div class="glass p-8 rounded-[40px] mb-8">
-                <h3 class="text-xs font-black text-sky-400 mb-6 uppercase tracking-widest">HTTP Full Traffic Log</h3>
-                <div class="space-y-4">
-                    ${logs.map(l => `<div class="flex flex-col border-b border-white/5 pb-3">
-                        <div class="flex justify-between mb-1">
-                            <span class="text-[9px] font-black bg-white/10 px-2 py-0.5 rounded text-sky-400">${l.method}</span>
-                            <span class="text-[9px] text-slate-600 font-mono">${new Date(l.timestamp).toLocaleTimeString()}</span>
-                        </div>
-                        <p class="text-[11px] font-mono text-emerald-400 break-all">${l.fullUrl}</p>
-                    </div>`).join('')}
-                </div>
-            </div>
-        </div>
-
-        <script>function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }</script>
-    </body></html>`);
+    res.send(`<!DOCTYPE html><html><head><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>body{background:#020617;color:#fff;font-family:sans-serif}.glass{background:rgba(15,23,42,.7);backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,.05)}.sidebar{transition:.4s;transform:translateX(-100%)}.sidebar.active{transform:translateX(0)}</style></head><body class="p-4"><div id="sidebar" class="sidebar fixed top-0 left-0 w-72 h-full glass z-50 p-8 shadow-2xl"> <h2 class="text-sky-400 font-black mb-10 italic text-xl uppercase">Kaaa Menu</h2> <nav class="space-y-4 font-bold"> <a href="/" class="block p-4 rounded-2xl bg-sky-500/10 text-sky-400">Dashboard</a> <a href="/docs" class="block p-4 rounded-2xl hover:bg-white/5">Documentation</a> <a href="https://t.me/autoorderkaabot" target="_blank" class="block p-4 rounded-2xl bg-emerald-500/10 text-emerald-400">Order Panel</a> <a href="/logout" class="block p-4 rounded-2xl text-red-400 mt-10">Logout</a> </nav> <button onclick="toggleSidebar()" class="absolute top-8 right-8 text-slate-500"><i class="fas fa-times"></i></button></div><div class="max-w-4xl mx-auto"><header class="flex justify-between items-center mb-8"><button onclick="toggleSidebar()" class="w-12 h-12 glass rounded-2xl text-sky-400 text-xl"><i class="fas fa-bars-staggered"></i></button><h1 class="text-2xl font-black italic text-sky-400">KAAAOFFC</h1></header><div class="grid grid-cols-2 gap-4 mb-6"><div class="glass p-6 rounded-[35px] border-l-4 border-sky-500"><p class="text-[10px] font-black text-slate-500 uppercase">Hits Record</p><p class="text-3xl font-black text-sky-400 mt-1">${stats.total_req.toLocaleString()}</p></div><div class="glass p-6 rounded-[35px] border-l-4 border-emerald-500"><p class="text-[10px] font-black text-slate-500 uppercase">Accounts</p><p class="text-3xl font-black text-emerald-400 mt-1">${totalAkun}</p></div></div><div class="glass p-8 rounded-[40px] mb-8"><h3 class="text-xs font-black text-sky-400 mb-6 uppercase tracking-widest">HTTP Traffic Log</h3><div class="space-y-4">${logs.map(l => `<div class="flex flex-col border-b border-white/5 pb-3"><div class="flex justify-between mb-1"><span class="text-[9px] font-black bg-white/10 px-2 py-0.5 rounded text-sky-400">${l.method}</span><span class="text-[9px] text-slate-600 font-mono">${new Date(l.timestamp).toLocaleTimeString()}</span></div><p class="text-[11px] font-mono text-emerald-400 break-all">${l.fullUrl}</p></div>`).join('')}</div></div></div><script>function toggleSidebar(){document.getElementById('sidebar').classList.toggle('active')}</script></body></html>`);
 });
 
-
-// --- AUTH LOGIC ---
-app.post('/auth/login', async (req, res) => {
-    await connectDB();
-    const { email, password } = req.body;
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    await User.findOneAndUpdate({ email }, { password, otp, isVerified: false }, { upsert: true });
-    await resend.emails.send({ from: 'KaaaCloud <code@kaaaoffc.web.id>', to: email, subject: 'Cloud Verification', html: `<b>Your OTP: ${otp}</b>` });
-    res.redirect('/verify?email=' + email);
-});
-
-app.get('/verify', (req, res) => res.send('<body style="background:#020617;display:flex;align-items:center;justify-content:center;height:100vh;color:white;font-family:sans-serif;"><form action="/auth/verify" method="POST" style="background:#0f172a;padding:50px;border-radius:40px;border:1px solid #38bdf8;text-align:center;"> <h2 style="font-weight:900;margin-bottom:20px;">VERIFY OTP</h2> <input name="email" type="hidden" value="'+req.query.email+'"> <input name="otp" type="text" placeholder="6 Digit Code" style="padding:15px;border-radius:10px;text-align:center;width:100%;"><br><button type="submit" style="background:#38bdf8;margin-top:20px;padding:15px 40px;font-weight:900;border-radius:10px;width:100%;">VALIDATE</button></form></body>'));
-
-app.post('/auth/verify', async (req, res) => {
-    await connectDB();
-    const { email, otp } = req.body;
-    const user = await User.findOne({ email, otp });
-    if (user) {
-        res.cookie('userEmail', email, { maxAge: 86400000 });
-        res.redirect('/');
-    } else res.send("Invalid OTP!");
-});
-// 3. Halaman Dokumentasi (Docs)
+// --- DOCS ---
 app.get('/docs', (req, res) => {
-    res.send(`
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Docs - Kaaaoffc API</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', monospace;
-    background: linear-gradient(135deg, #020617, #0f172a);
-    color: #e2e8f0;
-    padding: 20px;
-}
-
-/* HEADER */
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 28px;
-    background: linear-gradient(90deg, #38bdf8, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* CARD */
-.card {
-    backdrop-filter: blur(12px);
-    background: rgba(30, 41, 59, 0.6);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid rgba(56,189,248,0.2);
-    transition: 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.card:hover {
-    transform: translateY(-5px) scale(1.01);
-    box-shadow: 0 0 25px rgba(56,189,248,0.2);
-}
-
-/* TITLE */
-.card h2 {
-    color: #38bdf8;
-    margin-bottom: 10px;
-}
-
-/* CODE */
-code {
-    background: #020617;
-    padding: 6px 10px;
-    border-radius: 8px;
-    color: #f472b6;
-    display: inline-block;
-    margin-top: 5px;
-    font-size: 13px;
-}
-
-/* LINK */
-a {
-    color: #38bdf8;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* FOOTER */
-.footer {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-.footer a {
-    color: #38bdf8;
-    font-weight: bold;
-}
-
-.footer a:hover {
-    color: #a78bfa;
-}
-</style>
-</head>
-
-<body>
-
-<h1>📚 Kaaaoffc API Documentation</h1>
-
-<div class="card">
-    <h2>🤖 Artificial Intelligence</h2>
-    <p>Gemini AI:</p>
-    <code>/ai/gemini?text=halo</code>
-</div>
-
-<div class="card">
-    <h2>📱 Social Media Search</h2>
-    <p>TikTok Search:</p>
-    <code>/search/tiktok?q=sewates konco</code>
-    <p>YouTube Search:</p>
-    <code>/search/youtube?q=sewates konco</code>
-</div>
-
-<div class="card">
-    <h2>🕌 MyQuran Service</h2>
-    <p>Cari Kota:</p>
-    <code>/cari/kota/kediri</code>
-    <p>Jadwal Sholat:</p>
-    <code>/sholat/1301</code>
-</div>
-
-<div class="card">
-    <h2>🌊 Anime Search</h2>
-    <p>Komiku Search:</p>
-    <code>/search/anime/komiku/search?q=Judul</code>
-    <p>YouTube Anime:</p>
-    <code>/search/youtube?q=Judul</code>
-</div>
-
-<div class="card">
-    <h2>ℹ️ Informasi</h2>
-    <p>Gempa:</p>
-    <code>/information/gempa</code>
-    <p>Cuaca:</p>
-    <code>/information/cuaca?kota=malang</code>
-</div>
-
-<div class="footer">
-    <a href="https://wa.me/6285137572401" target="_blank">
-        ©2026 Kaaa Offc
-    </a>
-</div>
-
-</body>
-</html>
-`);
+    res.send(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Docs - Kaaaoffc API</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:'Segoe UI',monospace;background:linear-gradient(135deg,#020617,#0f172a);color:#e2e8f0;padding:20px}h1{text-align:center;margin-bottom:30px;font-size:28px;background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.card{backdrop-filter:blur(12px);background:rgba(30,41,59,.6);border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid rgba(56,189,248,.2);transition:.3s}.card:hover{transform:translateY(-5px);box-shadow:0 0 25px rgba(56,189,248,.2)}h2{color:#38bdf8;margin-bottom:10px}code{background:#020617;padding:6px 10px;border-radius:8px;color:#f472b6;font-size:13px;display:block;margin-top:5px}</style></head><body><h1>📚 Kaaaoffc Documentation</h1><div class="card"><h2>🤖 AI Gemini</h2><code>/ai/gemini?text=halo</code></div><div class="card"><h2>📱 TikTok Search</h2><code>/search/tiktok?q=query</code></div><div class="card"><h2>🕌 Sholat</h2><code>/sholat/1301</code></div><div class="card"><h2>ℹ️ Cuaca</h2><code>/information/cuaca?kota=malang</code></div><div style="text-align:center;margin-top:40px"><a href="/" style="color:#38bdf8;text-decoration:none">← Back Dashboard</a></div></body></html>`);
 });
 
-/ 4. API Endpoint - Gemini AI (via NexRay)
+// --- API ENDPOINTS ---
 app.get('/ai/gemini', async (req, res) => {
     const text = req.query.text;
     if (!text) return res.json({ status: false, message: "Contoh: /ai/gemini?text=halo" });
@@ -335,58 +72,13 @@ app.get('/ai/gemini', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "API AI Error" }); }
 });
 
-// 5. API Endpoint - TikTok Search (via NexRay)
 app.get('/search/tiktok', async (req, res) => {
     const q = req.query.q;
-    if (!q) return res.json({ status: false, message: "Contoh: /search/tiktok?q=sewates konco" });
+    if (!q) return res.json({ status: false, message: "Contoh: /search/tiktok?q=query" });
     try {
         const response = await axios.get(`https://api.nexray.web.id/search/tiktok?q=${encodeURIComponent(q)}`);
         res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
     } catch (e) { res.json({ status: false, error: "TikTok Search Error" }); }
-});
-
-// 6. API Endpoint - MyQuran
-app.get('/cari/kota/:nama', async (req, res) => {
-    try {
-        const r = await axios.get(`https://api.myquran.com/v2/sholat/kota/cari/${req.params.nama}`);
-        res.json(r.data);
-    } catch (e) { res.json({ status: false, error: "Gagal cari kota" }); }
-});
-
-app.get('/sholat/:id', async (req, res) => {
-    try {
-        const d = new Date();
-        const tgl = `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
-        const r = await axios.get(`https://api.myquran.com/v2/sholat/jadwal/${req.params.id}/${tgl}`);
-        res.json(r.data);
-    } catch (e) { res.json({ status: false, error: "Gagal ambil jadwal" }); }
-});
-
-app.get('/search/youtube', async (req, res) => {
-    const q = req.query.q;
-    if (!q) return res.json({ status: false, message: "Contoh: /search/youtube?q=sewates konco" });
-    try {
-        const response = await axios.get(`https://api.nexray.web.id/search/youtube?q=${encodeURIComponent(q)}`);
-        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
-    } catch (e) { res.json({ status: false, error: "Youtube Search Error" }); }
-});
-
-app.get('/search/anime/komiku/search', async (req, res) => {
-    const q = req.query.q;
-    if (!q) return res.json({ status: false, message: "Contoh: /search/anime/komiku/search?q=Judul" });
-    try {
-        const response = await axios.get(`https://api.nexray.web.id/search/anime/komiku/search  ?q=${encodeURIComponent(q)}`);
-        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
-    } catch (e) { res.json({ status: false, error: "Anime Search Error" }); }
-});
-
-app.get('/information/gempa', async (req, res) => {
-    const q = req.query.q;
-    if (!q) return res.json({ status: false, message: "Contoh: /search/yout" });
-    try {
-        const response = await axios.get(`https://api.nexray.web.id/information/gempa${encodeURIComponent(q)}`);
-        res.json({ status: true, creator: "Kaaaoffc", result: response.data.result });
-    } catch (e) { res.json({ status: false, error: "Info gempa Error" }); }
 });
 
 app.get('/information/cuaca', async (req, res) => {
@@ -398,7 +90,27 @@ app.get('/information/cuaca', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Cuaca Search Error" }); }
 });
 
+// --- AUTH HANDLERS ---
+app.post('/auth/login', async (req, res) => {
+    await connectDB();
+    const { email, password } = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await User.findOneAndUpdate({ email }, { password, otp, isVerified: false }, { upsert: true });
+    await resend.emails.send({ from: 'KaaaCloud <code@kaaaoffc.web.id>', to: email, subject: 'Cloud Verification', html: `<b>OTP: ${otp}</b>` });
+    res.redirect('/verify?email=' + email);
+});
 
+app.get('/verify', (req, res) => res.send('<body style="background:#020617;display:flex;align-items:center;justify-content:center;height:100vh;color:white;"><form action="/auth/verify" method="POST" style="background:#0f172a;padding:50px;border-radius:40px;border:1px solid #38bdf8;text-align:center;"><h2>OTP CODE</h2><input name="email" type="hidden" value="'+req.query.email+'"><input name="otp" type="text" style="padding:15px;width:100%;"><button type="submit" style="background:#38bdf8;margin-top:20px;width:100%;padding:15px;font-weight:900;">VERIFY</button></form></body>'));
+
+app.post('/auth/verify', async (req, res) => {
+    await connectDB();
+    const { email, otp } = req.body;
+    const user = await User.findOne({ email, otp });
+    if (user) {
+        res.cookie('userEmail', email, { maxAge: 86400000 });
+        res.redirect('/');
+    } else res.send("OTP Salah!");
+});
 
 app.get('/logout', (req, res) => { res.clearCookie('userEmail'); res.redirect('/login'); });
 
