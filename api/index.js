@@ -162,7 +162,7 @@ app.get('/ai/blacblock', async (req, res) => {
     } catch (e) { res.json({ status: false }); }
 });
 
-app.get('/search/tiktok', async (req, res) => {
+app.get('/tiktok', async (req, res) => {
     const { search } = req.query;
     if (!search) return res.json({ status: false, message: "Input search!" });
     try {
