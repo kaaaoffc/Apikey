@@ -152,24 +152,6 @@ app.get('/', async (req, res) => {
     </body></html>`);
 });
 
-// --- API ENDPOINTS (AI & TIKTOK) ---
-app.get('/ai/blacblock', async (req, res) => {
-    const { text } = req.query;
-    if (!text) return res.json({ status: false, message: "Input query!" });
-    try {
-        const response = await axios.get(`https://www.blackbox.ai/api/chat?q=${encodeURIComponent(text)}`);
-        res.json({ status: true, creator: "KaaaOffc", result: response.data });
-    } catch (e) { res.json({ status: false }); }
-});
-
-app.get('/tiktok', async (req, res) => {
-    const { search } = req.query;
-    if (!search) return res.json({ status: false, message: "Input search!" });
-    try {
-        const response = await axios.get(`https://api.nexray.eu.cc/search/tiktok?q=${encodeURIComponent(search)}`);
-        res.json({ status: true, creator: "KaaaOffc", result: response.data });
-    } catch (e) { res.json({ status: false }); }
-});
 
 // --- AUTH LOGIC ---
 app.post('/auth/login', async (req, res) => {
