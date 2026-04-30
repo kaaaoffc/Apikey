@@ -169,7 +169,7 @@ app.get('/information/cuaca', async (req, res) => {
 
 app.get('/sholat/1301', async (req, res) => {
     try {
-        const r = await axios.get(`https://api.nexray.web.id/sholat/1301`);
+        const r = await axios.get(`https://myquran.com/sholat/1301`);
         res.json({ status: true, result: r.data.result });
     } catch (e) { res.json({ status: false, error: "API Error" }); }
 });
