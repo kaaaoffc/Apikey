@@ -188,6 +188,17 @@ app.get('/docs', (req, res) => {
     res.send(`<body style="background:#020617;color:white;padding:50px;font-family:sans-serif;"><h1>API DOCS</h1><ul><li>/ai/gemini?text=</li><li>/search/tiktok?q=</li><li>/information/cuaca?kota=</li></ul><a href="/" style="color:cyan;">Back</a></body>`);
 });
 
+
+app.get('/dowload/spotify', async (req, res) => {
+    const { q } = req.query;
+    if (!q) return res.json({ status: false, message: "Use ?q=" });
+    try {
+        const r = await axios.get(`https://api.nexray.eu.cc/downloader/spotify?url=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: r.data.result });
+    } catch (e) { res.json({ status: false, error: "Spotify Error" }); }
+});
+
+
 // --- AUTH LOGIC ---
 app.get('/login', (req, res) => {
     res.send(`<!DOCTYPE html><html><body style="background:#020617;color:white;display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;">
