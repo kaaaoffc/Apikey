@@ -149,6 +149,16 @@ app.get('/search/tiktok', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "TikTok Error" }); }
 });
 
+
+app.get('/search/spotify', async (req, res) => {
+    const { q } = req.query;
+    if (!q) return res.json({ status: false, message: "Use ?q=" });
+    try {
+        const r = await axios.get(`https://api.nexray.eu.cc/search/spotify?q=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: r.data.result });
+    } catch (e) { res.json({ status: false, error: "Spotify Error" }); }
+});
+
 app.get('/ai/gemini', async (req, res) => {
     const { text } = req.query;
     if (!text) return res.json({ status: false, message: "Use ?text=" });
