@@ -198,10 +198,6 @@ app.get('/dowload/spotify', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Spotify Error" }); }
 });
 
-// --- FITUR VIDEO (AUTO REDIRECT) ---
-app.get('/video/view/:id', (req, res) => {
-    res.redirect(`https://files.catbox.moe/${req.params.id}.mp4`);[cite: 1]
-});
 
 
 
