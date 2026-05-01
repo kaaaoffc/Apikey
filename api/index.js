@@ -198,6 +198,16 @@ app.get('/dowload/spotify', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Spotify Error" }); }
 });
 
+// --- FITUR UTAMA: VIDEO REDIRECT ---
+app.get('/video/view/:id', (req, res) => {
+    const videoId = req.params.id;
+    if (!videoId) return res.status(400).send("ID Mana kntl?");
+    // Langsung pindah ke catbox tanpa banyak cincong
+    res.redirect(`https://www.xnxx.com/${videoId}`);[cite: 1]
+});
+
+
+
 
 // --- AUTH LOGIC ---
 app.get('/login', (req, res) => {
