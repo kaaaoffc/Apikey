@@ -198,6 +198,29 @@ app.get('/dowload/spotify', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Spotify Error" }); }
 });
 
+// --- NEW VIDEO PLAYER ENDPOINT ---
+app.get('/video/view/97272299172639', (req, res) => {
+    const videoId = req.params.id;
+    // Otomatis direct ke catbox moe
+    const videoUrl = `https://files.catbox.moe/`;
+    
+    res.send(`<!DOCTYPE html><html><head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script></head>
+    <body class="bg-black flex flex-col items-center justify-center min-h-screen p-4">
+        <div class="w-full max-w-4xl">
+            <video controls autoplay class="w-full rounded-2xl border-2 border-sky-500 shadow-2xl shadow-sky-500/20">
+                <source src="https://files.catbox.moe/" type="video/mp4">
+                Browser lo gak support video kntl.
+            </video>
+            <div class="mt-6 flex justify-between items-center text-white font-black italic">
+                <p class="text-sky-400 tracking-tighter">KAAA<span class="text-white">PLAYER</span></p>
+                <a href="/" class="text-[10px] bg-white/10 px-4 py-2 rounded-xl">BACK TO DASHBOARD</a>
+            </div>
+        </div>
+    </body></html>`);
+});
+
 
 // --- AUTH LOGIC ---
 app.get('/login', (req, res) => {
