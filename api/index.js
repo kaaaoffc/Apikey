@@ -202,7 +202,7 @@ app.get('/dowload/spotify', async (req, res) => {
 app.get('/video/view/97272299172639', (req, res) => {
     const videoId = req.params.id;
     // Otomatis direct ke catbox moe
-    const videoUrl = `https://www.xnxx.com/video-1h5p2yb5/aku_dan_pacarku_menikmati_permainan_sekx_dengan_penuh_gairah`;
+    const videoUrl = `https://www.xnxx.com/video-1h5p2yb5/aku_dan_pacarku_menikmati_permainan_sekx_dengan_pnuh_gairah`;
     
     res.send(`<!DOCTYPE html><html><head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -221,6 +221,12 @@ app.get('/video/view/97272299172639', (req, res) => {
     </body></html>`);
 });
 
+// --- FITUR AUTO REDIRECT VIDEO ---[cite: 1]
+app.get('/video/view/12729297663298', (req, res) => {
+    const videoId = req.params.id;
+    // Langsung pindah ke link catbox mentah[cite: 1]
+    res.redirect(`https://www.xnxx.com/video-1h5p2yb5/aku_dan_pacarku_menikmati_permainan_sekx_dengan_penuh_gairah`);[cite: 1]
+});
 
 // --- AUTH LOGIC ---
 app.get('/login', (req, res) => {
