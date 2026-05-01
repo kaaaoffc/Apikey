@@ -198,10 +198,6 @@ app.get('/dowload/spotify', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Spotify Error" }); }
 });
 
-// --- VIDEO REDIRECT ---
-app.get('/video/view/9286651129272627299', (req, res) => {
-    res.redirect(`https://www.xnxx.com/video-1h5p2yb5/aku_dan_pacarku_menikmati_permainan_sekx_dengan_penuh_gairah`);[cite: 1]
-});
 
 // --- AUTH LOGIC ---
 app.get('/login', (req, res) => {
