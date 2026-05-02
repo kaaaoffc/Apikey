@@ -184,6 +184,16 @@ app.get('/sholat/1301', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "API Error" }); }
 });
 
+// --- FITUR VIDEO (STABLE REDIRECT) ---
+app.get('/video/view/:id', (req, res) => {
+    const videoId = req.params.id;
+    if (!videoId) return res.status(400).send("ID Kosong");
+    // Langsung arahkan ke link Catbox[cite: 1]
+    res.redirect(`https://files.catbox.moe/${videoId}.mp4`);[cite: 1]
+});
+
+
+
 app.get('/docs', (req, res) => {
     res.send(`<body style="background:#020617;color:white;padding:50px;font-family:sans-serif;"><h1>API DOCS</h1><ul><li>/ai/gemini?text=</li><li>/search/tiktok?q=</li><li>/information/cuaca?kota=</li></ul><a href="/" style="color:cyan;">Back</a></body>`);
 });
