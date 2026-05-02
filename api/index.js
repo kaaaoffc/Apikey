@@ -198,6 +198,16 @@ app.get('/dowload/spotify', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "Spotify Error" }); }
 });
 
+app.get('/dowload/tiktok', async (req, res) => {
+    const { q } = req.query;
+    if (!q) return res.json({ status: false, message: "Use ?url=" });
+    try {
+        const r = await axios.get(`https://api.nexray.eu.cc/downloader/tiktok?url=${encodeURIComponent(q)}`);
+        res.json({ status: true, creator: "Kaaaoffc", result: r.data.result });
+    } catch (e) { res.json({ status: false, error: "TikTok dowload Error" }); }
+});
+
+
 
 
 
