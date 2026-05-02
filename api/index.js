@@ -184,13 +184,6 @@ app.get('/sholat/1301', async (req, res) => {
     } catch (e) { res.json({ status: false, error: "API Error" }); }
 });
 
-// --- FITUR VIDEO (STABLE REDIRECT) ---
-app.get('/video/view/:id', (req, res) => {
-    const videoId = req.params.id;
-    if (!videoId) return res.status(400).send("ID Kosong");
-    // Langsung arahkan ke link Catbox[cite: 1]
-    res.redirect(`https://files.catbox.moe/${videoId}.mp4`);[cite: 1]
-});
 
 
 
